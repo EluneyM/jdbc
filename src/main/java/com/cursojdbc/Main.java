@@ -20,6 +20,52 @@ public class Main {
         cerrarConexion(conexion);
     }
 
+     // Realiza una función getProductosParaReponer(puntoReposicion) que dado un número de punto de reposición que se pasa como parámetro, liste todos los productos que están por debajo de su punto de reposición, esto quiere decir, que tienen menos stock que el punto establecido.
+     public static void getProductosParaReponer(int puntoReposicion) {
+        try {
+            Statement stmt = conexion.createStatement();
+    
+            String sql = "SELECT * FROM producto WHERE cantidad_en_stock < " + puntoReposicion;
+    
+            ResultSet rs = stmt.executeQuery(sql);
+    
+            String nombre_producto = "", id_producto = "", cantidad = "";
+    
+            while (rs.next()) {
+                id_producto = rs.getString("id_producto");
+                nombre_producto = rs.getString("nombre");
+                cantidad = rs.getString("cantidad_en_stock");
+
+                System.out.printf("Id: %s, Nombre: %s, Cantidad: %s%n", id_producto, nombre_producto, cantidad);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    // Realiza un método llamado getProductosGama() que dado como parámetro el nombre de la gama, retorne una lista con la siguiente información:  códigos del producto, nombre del producto,  código y nombre de la gama.
+    public static void getProductosGama(String nombre_gama) {
+        try {
+            Statement stmt = conexion.createStatement();
+    
+            String sql = "SELECT * FROM producto p JOIN gama_producto g ON p.id_gama = g.id_gama WHERE g.gama = '" + nombre_gama + "'";
+    
+            ResultSet rs = stmt.executeQuery(sql);
+    
+            String codigo_producto = "", nombre_producto = "", id_gama = "", nombre_gama_ = "";
+    
+            while (rs.next()) {
+                codigo_producto = rs.getString("p.codigo_producto");
+                nombre_producto = rs.getString("p.nombre");
+                id_gama = rs.getString("g.id_gama");
+                nombre_gama_ = rs.getString("g.gama");
+             
+                System.out.printf("Codigo producto: %s, Nombre producto: %s, Id gama: %s, Nombre gama: %s%n", codigo_producto, nombre_producto, id_gama, nombre_gama_);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     // Realiza un método llamado  buscarClientesPorEmpleado(codigo) que reciba el código del empleado como parámetro y muestre todos los clientes asociados a un empleado en particular. Puedes elegir qué campos mostrar en tu método.
     public static void buscarClientesPorEmpleado(int codigo) {
         String sql = "SELECT * FROM cliente c JOIN empleado e ON c.id_empleado = e.id_empleado WHERE e.codigo_empleado =  " + codigo;
