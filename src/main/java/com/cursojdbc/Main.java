@@ -2,45 +2,94 @@ package com.cursojdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Main {
+    public static Connection conexion;
     public static void main(String[] args) throws Exception {
-        Connection conexion = getConnection();
+        conexion = getConnection();
 
-        // Consulta
-        try (
-                Statement stmt = conexion.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT codigo_cliente, nombre_cliente, limite_credito FROM cliente")
-            ) 
-        {
-            while (rs.next()) {
-                int x = rs.getInt("codigo_cliente");
-                String s = rs.getString("nombre_cliente");
-                double d = rs.getDouble("limite_credito");
-                System.out.println("Fila = " + x + " " + s + " " + d);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        //buscarClientes(conexion);
 
-        // Sentencia preparada
+        //buscarClientePorCodigo(4);
 
-        try (
-            PreparedStatement ps = conexion.prepareStatement("UPDATE cliente SET nombre_cliente = 'GoldFish Garden Actualizado' WHERE id_cliente < ?");
-        ) {
-            ps.setInt(1, 5);
-            int n = ps.executeUpdate();
-
-            System.out.println("Executado con éxito!" + n);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        buscarClientesPorEmpleado(11);
 
         cerrarConexion(conexion);
+    }
+
+    // Realiza un método llamado  buscarClientesPorEmpleado(codigo) que reciba el código del empleado como parámetro y muestre todos los clientes asociados a un empleado en particular. Puedes elegir qué campos mostrar en tu método.
+    public static void buscarClientesPorEmpleado(int codigo) {
+        String sql = "SELECT * FROM cliente c JOIN empleado e ON c.id_empleado = e.id_empleado WHERE e.codigo_empleado =  " + codigo;
+
+        try {
+             Statement stmt = conexion.createStatement();
+             ResultSet rs = stmt.executeQuery(sql);
+             int count = 0;
+             while (rs.next()) {
+                  int codigoCliente = rs.getInt("codigo_cliente");
+                  String nombre = rs.getString("nombre_contacto");
+                  String apellido = rs.getString("apellido_contacto");
+                  int codigoEmpleado = rs.getInt("codigo_empleado");
+                  String telefono = rs.getString("telefono");
+                  count++;
+                  System.out.println(count + " - " + codigoCliente + " - " + "codigo empleado: " + codigoEmpleado + " - " + nombre + " " + apellido + " -  " + telefono);
+             }
+             // Cerrar ResultSet y Statement dentro del bloque try-catch-finally
+             rs.close();
+             stmt.close();
+        } catch (SQLException e) {
+             System.out.println("Error en la consulta: " + e.getMessage());
+        }
+    }
+
+    // Realiza un método llamado buscarClientePorCodigo(codigo) que reciba como parámetro el código del cliente y muestre por pantalla los datos que tiene el cliente guardado en la base de datos. 
+    public static void buscarClientePorCodigo(int codigo) {
+        String sql = "SELECT * FROM cliente WHERE codigo_cliente =  " + codigo;
+        try {
+             Statement stmt = conexion.createStatement();
+             ResultSet rs = stmt.executeQuery(sql);
+             int count = 0;
+             while (rs.next()) {
+                  int codigoCliente = rs.getInt("codigo_cliente");
+                  String nombre = rs.getString("nombre_contacto");
+                  String apellido = rs.getString("apellido_contacto");
+                  String telefono = rs.getString("telefono");
+                  count++;
+                  System.out.println(count + " - " + codigoCliente + " - " + nombre + " " + apellido + " -  " + telefono);
+             }
+             // Cerrar ResultSet y Statement dentro del bloque try-catch-finally
+             rs.close();
+             stmt.close();
+        } catch (SQLException e) {
+             System.out.println("Error en la consulta: " + e.getMessage());
+        }
+    }
+
+
+    //Crea un método llamado buscarClientes() dentro de tu clase App. Este método debe conectarse a la base de datos y recuperar la información de los clientes almacenados en la base de datos vivero. La consulta SQL debe recuperar el nombre, apellido y teléfono de todos los clientes. Los resultados deben imprimirse en consola.
+
+    public static void buscarClientes(Connection conexion) {
+        String sql = "SELECT nombre_contacto, apellido_contacto, telefono FROM cliente ";
+          try {
+               Statement stmt = conexion.createStatement();
+               ResultSet rs = stmt.executeQuery(sql);
+               int count = 0;
+               while (rs.next()) {
+                    String nombre = rs.getString("nombre_contacto");
+                    String apellido = rs.getString("apellido_contacto");
+                    String telefono = rs.getString("telefono");
+                    count++;
+                    System.out.println(count + " - " + nombre + " " + apellido + " -  " + telefono);
+               }
+               // Cerrar ResultSet y Statement dentro del bloque try-catch-finally
+               rs.close();
+               stmt.close();
+          } catch (SQLException e) {
+               System.out.println("Error en la consulta: " + e.getMessage());
+          }
     }
 
     public static Connection getConnection() {
