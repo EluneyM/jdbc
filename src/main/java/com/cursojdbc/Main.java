@@ -2,6 +2,7 @@ package com.cursojdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,10 +16,36 @@ public class Main {
 
         //buscarClientePorCodigo(4);
 
-        buscarClientesPorEmpleado(11);
+        //buscarClientesPorEmpleado(11);
+
+        getPedidosPorCliente(5);
 
         cerrarConexion(conexion);
     }
+    
+    // Realizar el método getPedidosPorCliente(idCliente)  en el cual se listen todos los pedidos de un cliente específico pasado por parámetro. No es necesario mostrar todos los campos de cada pedido. 
+    public static void getPedidosPorCliente(int idCliente) {
+        try {
+            String sql = "SELECT * FROM pedido p JOIN cliente c ON p.id_cliente = c.id_cliente WHERE c.id_cliente = ?";
+
+            PreparedStatement ps = conexion.prepareStatement(sql);
+
+            ps.setInt(1, idCliente);
+    
+            ResultSet rs = ps.executeQuery();
+    
+            String nombreCliente = "";
+    
+            while (rs.next()) {
+                nombreCliente = rs.getString("nombre_cliente");
+
+                System.out.printf("Nombre de cliente: %s %n", nombreCliente);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 
      // Realiza una función getProductosParaReponer(puntoReposicion) que dado un número de punto de reposición que se pasa como parámetro, liste todos los productos que están por debajo de su punto de reposición, esto quiere decir, que tienen menos stock que el punto establecido.
      public static void getProductosParaReponer(int puntoReposicion) {
