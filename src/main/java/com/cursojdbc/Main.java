@@ -5,22 +5,29 @@ import java.util.List;
 
 import com.cursojdbc.entidades.Cliente;
 import com.cursojdbc.persistencia.ClienteDAO;
+import com.cursojdbc.persistencia.ProductoDAO;
 
 public class Main {
     public static Connection conexion;
     public static void main(String[] args) throws Exception {
-        Cliente cliente1 = Cliente.makeSimpleCliente("1234", "Sai", "Cervantes");
-        Cliente cliente2 = Cliente.makeSimpleCliente("12345", "Luciana", "Soliz");
+        // Probando DAO
+        // Cliente cliente1 = Cliente.makeSimpleCliente("1234", "Sai", "Cervantes");
+        // Cliente cliente2 = Cliente.makeSimpleCliente("12345", "Luciana", "Soliz");
 
-        ClienteDAO clienteDAO = new ClienteDAO();
+        // ClienteDAO clienteDAO = new ClienteDAO();
         
-        clienteDAO.guardarCliente(cliente1);
-        clienteDAO.guardarCliente(cliente2);
+        // clienteDAO.guardarCliente(cliente1);
+        // clienteDAO.guardarCliente(cliente2);
 
-        List<Cliente> listaClientes = clienteDAO.listarTodosLosClientes();
+        // List<Cliente> listaClientes = clienteDAO.listarTodosLosClientes();
 
-        for (Cliente cliente : listaClientes) {
-            System.out.println(cliente.toString() + "\n");
-        }
+        // for (Cliente cliente : listaClientes) {
+        //     System.out.println(cliente.toString() + "\n");
+        // }
+
+        // Usando producto DAO
+        ProductoDAO productoDAO = new ProductoDAO();
+
+        productoDAO.eliminarProductoPorCodigo("FR-33");
     }
 }
