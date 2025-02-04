@@ -2,7 +2,7 @@ package com.cursojdbc.entidades;
 
 public class Cliente {
     private int idCliente;
-    private String codigoCliente;
+    private int codigoCliente;
     private String nombreCliente;
     private String nombreContacto;
     private String apellidoContacto;
@@ -15,12 +15,12 @@ public class Cliente {
     private int idEmpleado;
     private double limiteCredito;
 
-    public static Cliente makeSimpleCliente(String codigoCliente, String nombre, String apellido) {
+    public static Cliente makeSimpleCliente(int codigoCliente, String nombre, String apellido) {
         return new Cliente(codigoCliente, null, nombre, apellido, null, null, null, null, null, null, 0, 0);
     }
 
     public Cliente(
-        String codigoCliente,
+        int codigoCliente,
         String nombreCliente,
         String nombreContacto,
         String apellidoContacto,
@@ -50,7 +50,7 @@ public class Cliente {
     public int getIdCliente() {
         return idCliente;
     }
-    public String getCodigoCliente() {
+    public int getCodigoCliente() {
         return codigoCliente;
     }
     public String getNombreCliente() {

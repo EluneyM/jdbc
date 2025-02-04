@@ -20,6 +20,26 @@ public class ClienteDAO extends DAO {
         insertarModificarEliminarDataBase(sql);
     }
 
+    public void  buscarClientePorCodigo(int codigo) throws Exception{
+        try {
+            String sql = "SELECT codigo_cliente, nombre_contacto, apellido_contacto from cliente where codigo_cliente = "+codigo+";";
+            consultarDataBase(sql);
+            Cliente clienteEncontrado = null;
+            while (resultSet.next()) {
+                clienteEncontrado = Cliente.makeSimpleCliente(resultSet.getInt("codigo_cliente"), resultSet.getString("nombre_contacto"), resultSet.getString("apellido_contacto"));
+            }
+            
+            if (clienteEncontrado == null) {
+                System.out.printf("Cliente con código %s no encontrado", codigo);
+            } else {
+                System.out.println(clienteEncontrado.toString());
+            }
+
+        } catch (Exception e) {
+           throw e;
+        }
+    }
+
     public List<Cliente> listarTodosLosClientes() throws Exception {
         String sql = "SELECT * FROM cliente;";
         consultarDataBase(sql);
@@ -28,7 +48,7 @@ public class ClienteDAO extends DAO {
 
         while (resultSet.next()) {
             Cliente cliente = new Cliente(
-                    resultSet.getString("codigo_cliente"),
+                    resultSet.getInt("codigo_cliente"),
                     resultSet.getString("nombre_cliente"),
                     resultSet.getString("nombre_contacto"),
                     resultSet.getString("apellido_contacto"),
