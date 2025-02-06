@@ -1,33 +1,198 @@
 package com.cursojdbc;
 
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 import com.cursojdbc.entidades.Cliente;
-import com.cursojdbc.persistencia.ClienteDAO;
-import com.cursojdbc.persistencia.ProductoDAO;
+import com.cursojdbc.servicios.ClienteServicio;
+import com.cursojdbc.servicios.PedidoServicio;
 
 public class Main {
     public static Connection conexion;
+
     public static void main(String[] args) throws Exception {
-        // Probando DAO
-        // Cliente cliente1 = Cliente.makeSimpleCliente("1234", "Sai", "Cervantes");
-        // Cliente cliente2 = Cliente.makeSimpleCliente("12345", "Luciana", "Soliz");
+        Scanner scanner = new Scanner(System.in);
+        ClienteServicio servicioCliente = new ClienteServicio();
+        PedidoServicio pedidoServicio = new PedidoServicio();
 
-        // ClienteDAO clienteDAO = new ClienteDAO();
-        
-        // clienteDAO.guardarCliente(cliente1);
-        // clienteDAO.guardarCliente(cliente2);
+        while (true) {
+            System.out.println("\nMenú:");
+            System.out.println("1. Gestionar Clientes");
+            System.out.println("2. Gestionar Pedidos");
+            System.out.println("3. Salir");
+            System.out.print("Elige una opción: ");
+            int opcion = scanner.nextInt();
 
-        // List<Cliente> listaClientes = clienteDAO.listarTodosLosClientes();
+            if (opcion == 3) {
+                System.out.println("Saliendo...");
+                break;
+            }
 
-        // for (Cliente cliente : listaClientes) {
-        //     System.out.println(cliente.toString() + "\n");
-        // }
+            try {
 
-        // Usando producto DAO
-        ProductoDAO productoDAO = new ProductoDAO();
+                switch (opcion) {
+                    case 1:
+                        menuCliente(servicioCliente, scanner);
+                        break;
+                    case 2:
+                        menuPedido(pedidoServicio, scanner);
+                        break;
+                    default:
+                        System.out.println("Opción no válida.");
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
 
-        productoDAO.eliminarProductoPorCodigo("FR-33");
+        scanner.close();
+    }
+
+    private static void menuCliente(ClienteServicio servicioCliente, Scanner scanner) throws Exception {
+        System.out.println("\nOpciones Cliente:");
+        System.out.println("1. Guardar Cliente");
+        System.out.println("2. Buscar Cliente por Código");
+        System.out.println("3. Listar Todos los Clientes");
+        System.out.println("4. Volver");
+        System.out.print("Elige una opción: ");
+        int opcionCliente = scanner.nextInt();
+
+        switch (opcionCliente) {
+            case 1:
+                // Ingresar todas las propiedades del cliente
+                System.out.println("Ingrese los datos del cliente:");
+
+                System.out.print("Código Cliente: ");
+                int codigoCliente = scanner.nextInt();
+
+                scanner.nextLine(); // Consumir el salto de línea restante
+
+                System.out.print("Nombre Cliente: ");
+                String nombreCliente = scanner.nextLine();
+
+                System.out.print("Nombre Contacto: ");
+                String nombreContacto = scanner.nextLine();
+
+                System.out.print("Apellido Contacto: ");
+                String apellidoContacto = scanner.nextLine();
+
+                System.out.print("Teléfono: ");
+                String telefono = scanner.nextLine();
+
+                System.out.print("Fax: ");
+                String fax = scanner.nextLine();
+
+                System.out.print("Ciudad: ");
+                String ciudad = scanner.nextLine();
+
+                System.out.print("Región: ");
+                String region = scanner.nextLine();
+
+                System.out.print("País: ");
+                String pais = scanner.nextLine();
+
+                System.out.print("Código Postal: ");
+                String codigoPostal = scanner.nextLine();
+
+                System.out.print("ID Empleado: ");
+                int idEmpleado = scanner.nextInt();
+
+                System.out.print("Límite de Crédito: ");
+                double limiteCredito = scanner.nextDouble();
+
+                servicioCliente.crearNuevoCliente(
+                        codigoCliente,
+                        nombreCliente,
+                        nombreContacto,
+                        apellidoContacto,
+                        telefono,
+                        fax,
+                        ciudad,
+                        region,
+                        pais,
+                        codigoPostal,
+                        idEmpleado,
+                        limiteCredito);
+
+                System.out.println("Cliente guardado.");
+                break;
+            case 2:
+                System.out.print("Ingresa el código del cliente: ");
+                int codigoBuscarCliente = scanner.nextInt();
+                servicioCliente.buscarClientePorCodigo(codigoBuscarCliente);
+                break;
+            case 3:
+                System.out.println("Lista de Clientes:");
+                List<Cliente> listaClientes = servicioCliente.listarClientes();
+
+                for (Cliente cliente : listaClientes) {
+                    System.out.println(cliente.toString() + "\n");
+                }
+                break;
+            case 4:
+                return;
+            default:
+                System.out.println("Opción no válida.");
+        }
+    }
+
+    private static void menuPedido(PedidoServicio servicioPedido, Scanner scanner) throws Exception {
+        System.out.println("\nOpciones Pedido:");
+        System.out.println("1. Guardar Pedido");
+        System.out.println("2. Volver");
+        System.out.print("Elige una opción: ");
+        int opcionPedido = scanner.nextInt();
+
+        switch (opcionPedido) {
+            case 1:
+                // Ingresar datos del pedido
+                System.out.println("Ingrese los datos del pedido:");
+
+                scanner.nextLine(); // Consumir el salto de línea restante
+
+                System.out.print("Código Pedido: ");
+                String codigoPedido = scanner.nextLine();
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+                // Ingresar la fecha del pedido
+                System.out.print("Fecha de Pedido (yyyy-MM-dd): ");
+                String fechaPedidoStr = scanner.nextLine();
+                Date fechaPedido = dateFormat.parse(fechaPedidoStr);
+
+                // Ingresar la fecha esperada
+                System.out.print("Fecha Esperada (yyyy-MM-dd): ");
+                String fechaEsperadaStr = scanner.nextLine();
+                Date fechaEsperada = dateFormat.parse(fechaEsperadaStr);
+
+                // Ingresar la fecha de entrega
+                System.out.print("Fecha de Entrega (yyyy-MM-dd): ");
+                String fechaEntregaStr = scanner.nextLine();
+                Date fechaEntrega = dateFormat.parse(fechaEntregaStr);
+
+                // Ingresar el estado
+                System.out.print("Estado: ");
+                String estado = scanner.nextLine();
+
+                // Ingresar comentarios
+                System.out.print("Comentarios: ");
+                String comentarios = scanner.nextLine();
+
+                // Ingresar ID Cliente
+                System.out.print("ID Cliente: ");
+                int idCliente = scanner.nextInt();
+
+                servicioPedido.guardarPedido(codigoPedido, fechaPedido, fechaEsperada, fechaEntrega, estado,
+                        comentarios, idCliente);
+                System.out.println("Pedido guardado.");
+                break;
+            case 2:
+                return;
+            default:
+                System.out.println("Opción no válida.");
+        }
     }
 }
