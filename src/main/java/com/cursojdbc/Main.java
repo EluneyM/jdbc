@@ -62,13 +62,12 @@ public class Main {
 
         switch (opcionCliente) {
             case 1:
-                // Ingresar todas las propiedades del cliente
                 System.out.println("Ingrese los datos del cliente:");
 
                 System.out.print("Código Cliente: ");
                 int codigoCliente = scanner.nextInt();
 
-                scanner.nextLine(); // Consumir el salto de línea restante
+                scanner.nextLine();
 
                 System.out.print("Nombre Cliente: ");
                 String nombreCliente = scanner.nextLine();
@@ -148,40 +147,33 @@ public class Main {
 
         switch (opcionPedido) {
             case 1:
-                // Ingresar datos del pedido
                 System.out.println("Ingrese los datos del pedido:");
 
-                scanner.nextLine(); // Consumir el salto de línea restante
+                scanner.nextLine();
 
                 System.out.print("Código Pedido: ");
                 String codigoPedido = scanner.nextLine();
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-                // Ingresar la fecha del pedido
                 System.out.print("Fecha de Pedido (yyyy-MM-dd): ");
                 String fechaPedidoStr = scanner.nextLine();
                 Date fechaPedido = dateFormat.parse(fechaPedidoStr);
 
-                // Ingresar la fecha esperada
                 System.out.print("Fecha Esperada (yyyy-MM-dd): ");
                 String fechaEsperadaStr = scanner.nextLine();
                 Date fechaEsperada = dateFormat.parse(fechaEsperadaStr);
 
-                // Ingresar la fecha de entrega
                 System.out.print("Fecha de Entrega (yyyy-MM-dd): ");
                 String fechaEntregaStr = scanner.nextLine();
                 Date fechaEntrega = dateFormat.parse(fechaEntregaStr);
 
-                // Ingresar el estado
                 System.out.print("Estado: ");
                 String estado = scanner.nextLine();
 
-                // Ingresar comentarios
                 System.out.print("Comentarios: ");
                 String comentarios = scanner.nextLine();
 
-                // Ingresar ID Cliente
                 System.out.print("ID Cliente: ");
                 int idCliente = scanner.nextInt();
 
