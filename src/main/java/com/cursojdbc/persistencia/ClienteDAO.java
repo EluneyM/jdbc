@@ -6,90 +6,83 @@ import java.util.List;
 import com.cursojdbc.entidades.Cliente;
 
 public class ClienteDAO extends DAO {
-
-    public void guardarCliente(Cliente cliente) throws Exception {
+    public void guadarCliente(Cliente cliente) throws Exception {
+        // verificar que el cliente no sea nulo
         if (cliente == null) {
-            throw new Exception("El cliente no puede ser nulo");
+            throw new Exception("Cliente Nulo!!!");
         }
-        String sql = "INSERT INTO cliente (codigo_cliente, nombre_cliente, nombre_contacto, apellido_contacto, telefono, fax, ciudad, region, pais, codigo_postal, id_empleado, limite_credito) VALUES ('"
-                + cliente.getCodigoCliente() + "', '"
-                + cliente.getNombreCliente() + "', '"
-                + cliente.getNombreContacto() + "', '"
-                + cliente.getApellidoContacto() + "', '"
-                + cliente.getTelefono() + "', '"
-                + cliente.getFax() + "', '"
-                + cliente.getCiudad() + "', '"
-                + cliente.getRegion() + "', '"
-                + cliente.getPais() + "', '"
-                + cliente.getCodigoPostal() + "', '"
-                + cliente.getIdEmpleado() + "', '"
-                + cliente.getLimiteCredito() + "'"
-                + ");";
-
+        // script sql
+        String sql = "INSERT INTO clientes (nombre, calle, numero, codigo_postal, ciudad, pais, email) VALUES ('"
+                + cliente.getNombre() + "', "
+                + "'" + cliente.getCalle() + "', "
+                + cliente.getNumero() + ", "
+                + cliente.getCodigoPostal() + ", "
+                + "'" + cliente.getPais() + "', "
+                + "'" + cliente.getEmail() + "')";
+        // metodo DAO
         insertarModificarEliminarDataBase(sql);
-    }
-
-    public void  buscarClientePorCodigo(int codigo) throws Exception{
-        try {
-            String sql = "SELECT * from cliente where codigo_cliente = "+codigo+";";
-            consultarDataBase(sql);
-            Cliente clienteEncontrado = null;
-            while (resultSet.next()) {
-               clienteEncontrado = Cliente.make(
-                    resultSet.getInt("codigo_cliente"),
-                    resultSet.getString("nombre_cliente"),
-                    resultSet.getString("nombre_contacto"),
-                    resultSet.getString("apellido_contacto"),
-                    resultSet.getString("telefono"),
-                    resultSet.getString("fax"),
-                    resultSet.getString("ciudad"),
-                    resultSet.getString("region"),
-                    resultSet.getString("pais"),
-                    resultSet.getString("codigo_postal"),
-                    resultSet.getInt("id_empleado"),
-                    resultSet.getDouble("limite_credito"));
-            }
-            
-            if (clienteEncontrado == null) {
-                System.out.printf("Cliente con código %s no encontrado", codigo);
-            } else {
-                System.out.println(clienteEncontrado.toString());
-            }
-
-        } catch (Exception e) {
-           throw e;
-        }
-    }
-
-    public List<Cliente> listarTodosLosClientes() throws Exception {
-        String sql = "SELECT * FROM cliente;";
-        consultarDataBase(sql);
-
-        List<Cliente> clientes = new ArrayList<>();
-
-        while (resultSet.next()) {
-            Cliente cliente = Cliente.make(
-                    resultSet.getInt("codigo_cliente"),
-                    resultSet.getString("nombre_cliente"),
-                    resultSet.getString("nombre_contacto"),
-                    resultSet.getString("apellido_contacto"),
-                    resultSet.getString("telefono"),
-                    resultSet.getString("fax"),
-                    resultSet.getString("ciudad"),
-                    resultSet.getString("region"),
-                    resultSet.getString("pais"),
-                    resultSet.getString("codigo_postal"),
-                    resultSet.getInt("id_empleado"),
-                    resultSet.getDouble("limite_credito"));
-
-            clientes.add(cliente);
-        }
-
-        return clientes;
     }
 
     public void eliminarClientePorId(int id) throws Exception {
-        String sql = "DELETE FROM cliente WHERE id_cliente = " + id + ";";
+        // script sql
+        String sql = "DELETE FROM clientes WHERE id_cliente =" + id;
+        // método DAO
         insertarModificarEliminarDataBase(sql);
     }
+
+    public List<Cliente> listarClientes() throws Exception {
+        // script sql
+        String sql = "SELECT id_cliente, nombre, calle, numero, codigo_postal, ciudad, pais, email FROM cliente";
+        // método sql
+        consultarDataBase(sql);
+        // nueva lista de clientes
+        List<Cliente> clientes = new ArrayList<>();
+        // ciclo while
+        while (resultSet.next()) {
+            clientes.add(crearCliente());
+        }
+        //
+        return clientes;
+    }
+
+    public void actualizarCliente(Cliente cliente) throws Exception {
+        // script sql
+        String sql = "UPDATE SET ('"
+                + cliente.getNombre() + "', "
+                + "'" + cliente.getCalle() + "', "
+                + cliente.getNumero() + ", "
+                + cliente.getCodigoPostal() + ", "
+                + "'" + cliente.getPais() + "', "
+                + "'" + cliente.getEmail() + "'"
+                + ") WHERE id_cliente = " + cliente.getIdCliente();
+        insertarModificarEliminarDataBase(sql);
+    }
+
+    public Cliente buscarClientePorID(int id) throws Exception {
+        // script sql
+        String sql = "SELECT id_cliente, nombre, calle, numero, codigo_postal, ciudad, pais, email FROM clientes WHERE id = "
+                + id;
+        // método DAO
+        consultarDataBase(sql);
+        //
+        Cliente cliente = crearCliente();
+        return cliente;
+    }
+
+    public Cliente crearCliente() throws Exception {
+        // validar resulSet
+        if (resultSet == null) {
+            throw new Exception("No existe el registro!!");
+        }
+        // crear un nuevo cliente
+        return new Cliente(resultSet.getInt("id_cliente"),
+                resultSet.getString("nombre"),
+                resultSet.getString("calle"),
+                resultSet.getInt("numero"),
+                resultSet.getInt("codigo_postal"),
+                resultSet.getString("ciudad"),
+                resultSet.getString("pais"),
+                resultSet.getString("email"));
+    }
+
 }

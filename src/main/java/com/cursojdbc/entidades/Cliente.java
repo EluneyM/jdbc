@@ -1,159 +1,113 @@
 package com.cursojdbc.entidades;
 
-import java.security.InvalidParameterException;
-
 public class Cliente {
-    private int idCliente;
-    private int codigoCliente;
-    private String nombreCliente;
-    private String nombreContacto;
-    private String apellidoContacto;
-    private String telefono;
-    private String fax;
+    // nombre columnas
+    private Integer idCliente;
+    private String nombre;
+    private String calle;
+    private Integer numero;
+    private Integer codigoPostal;
     private String ciudad;
-    private String region;
     private String pais;
-    private String codigoPostal;
-    private int idEmpleado;
-    private double limiteCredito;
+    private String email;
 
-    public static Cliente makeSimpleCliente(int codigoCliente, String nombre, String apellido) {
-        validar(codigoCliente, nombre, apellido);
-        return new Cliente(codigoCliente, null, nombre, apellido, null, null, null, null, null, null, 0, 0);
-    }
-
-    public static Cliente make(int codigoCliente,
-            String nombreCliente,
-            String nombreContacto,
-            String apellidoContacto,
-            String telefono,
-            String fax,
-            String ciudad,
-            String region,
-            String pais,
-            String codigoPostal,
-            int idEmpleado,
-            double limiteCredito) {
-
-        validar(codigoCliente, nombreContacto, apellidoContacto);
-        
-        return new Cliente(
-                codigoCliente,
-                nombreCliente,
-                nombreContacto,
-                apellidoContacto,
-                telefono,
-                fax,
-                ciudad,
-                region,
-                pais,
-                codigoPostal,
-                idEmpleado,
-                limiteCredito);
-    }
-
-    private Cliente(
-            int codigoCliente,
-            String nombreCliente,
-            String nombreContacto,
-            String apellidoContacto,
-            String telefono,
-            String fax,
-            String ciudad,
-            String region,
-            String pais,
-            String codigoPostal,
-            int idEmpleado,
-            double limiteCredito) {
-        this.codigoCliente = codigoCliente;
-        this.nombreCliente = nombreCliente;
-        this.nombreContacto = nombreContacto;
-        this.apellidoContacto = apellidoContacto;
-        this.telefono = telefono;
-        this.fax = fax;
-        this.ciudad = ciudad;
-        this.region = region;
-        this.pais = pais;
+     public Cliente(Integer idCliente, String nombre, String calle, Integer numero, Integer codigoPostal, String ciudad, String pais,
+            String email) {
+        this.idCliente = idCliente;
+        this.nombre = nombre;
+        this.calle = calle;
+        this.numero = numero;
         this.codigoPostal = codigoPostal;
-        this.idEmpleado = idEmpleado;
-        this.limiteCredito = limiteCredito;
+        this.ciudad = ciudad;
+        this.pais = pais;
+        this.email = email;
+    }
+    
+    public Cliente(String nombre, String calle, Integer numero, Integer codigoPostal, String ciudad, String pais,
+            String email) {
+        this.nombre = nombre;
+        this.calle = calle;
+        this.numero = numero;
+        this.codigoPostal = codigoPostal;
+        this.ciudad = ciudad;
+        this.pais = pais;
+        this.email = email;
     }
 
-    /**
-     * TODO: Se puede mejorar la validación
-     */
-    private static void validar(int codigoCliente, String nombreContacto, String apellidoContacto)
-            throws InvalidParameterException {
-        if (codigoCliente <= 0) {
-            throw new InvalidParameterException("El código del cliente tiene que ser mayor a cero.");
-        }
-
-        if (nombreContacto == null) {
-            throw new InvalidParameterException("El nombre del contacto no puede ser nulo.");
-        }
-        if (apellidoContacto == null) {
-            throw new InvalidParameterException("El apellido del contacto no puede ser nulo.");
-        }
+    // getters y settes
+    public Cliente() {
     }
 
-    public int getIdCliente() {
+    public Integer getIdCliente() {
         return idCliente;
     }
 
-    public int getCodigoCliente() {
-        return codigoCliente;
+    public void setIdCliente(Integer idCliente) {
+        this.idCliente = idCliente;
     }
 
-    public String getNombreCliente() {
-        return nombreCliente;
+    public String getNombre() {
+        return nombre;
     }
 
-    public String getNombreContacto() {
-        return nombreContacto;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public String getApellidoContacto() {
-        return apellidoContacto;
+    public String getCalle() {
+        return calle;
     }
 
-    public String getTelefono() {
-        return telefono;
+    public void setCalle(String calle) {
+        this.calle = calle;
     }
 
-    public String getFax() {
-        return fax;
+    public Integer getNumero() {
+        return numero;
+    }
+
+    public void setNumero(Integer numero) {
+        this.numero = numero;
+    }
+
+    public Integer getCodigoPostal() {
+        return codigoPostal;
+    }
+
+    public void setCodigoPostal(Integer codigoPostal) {
+        this.codigoPostal = codigoPostal;
     }
 
     public String getCiudad() {
         return ciudad;
     }
 
-    public String getRegion() {
-        return region;
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
     }
 
     public String getPais() {
         return pais;
     }
 
-    public String getCodigoPostal() {
-        return codigoPostal;
+    public void setPais(String pais) {
+        this.pais = pais;
     }
 
-    public int getIdEmpleado() {
-        return idEmpleado;
+    public String getEmail() {
+        return email;
     }
 
-    public double getLimiteCredito() {
-        return limiteCredito;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
+    // to string
     @Override
     public String toString() {
-        return "Cliente [idCliente=" + idCliente + ", codigoCliente=" + codigoCliente + ", nombreCliente="
-                + nombreCliente + ", nombreContacto=" + nombreContacto + ", apellidoContacto=" + apellidoContacto
-                + ", telefono=" + telefono + ", fax=" + fax + ", ciudad=" + ciudad + ", region=" + region + ", pais="
-                + pais + ", codigoPostal=" + codigoPostal + ", idEmpleado=" + idEmpleado + ", limiteCredito="
-                + limiteCredito + "]";
+        return "Cliente [idCliente=" + idCliente + ", nombre=" + nombre + ", calle=" + calle + ", numero=" + numero
+                + ", codigoPostal=" + codigoPostal + ", ciudad=" + ciudad + ", pais=" + pais + ", email=" + email + "]";
+
     }
+
 }

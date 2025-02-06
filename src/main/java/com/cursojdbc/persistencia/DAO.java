@@ -14,7 +14,7 @@ public abstract class DAO {
     private final String PORT = "3306";
     private final String USER = "root";
     private final String PASSWORD = "rootpassword";
-    private final String DATABASE = "vivero";
+    private final String DATABASE = "estancias";
     private final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private final String ZONA = "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
