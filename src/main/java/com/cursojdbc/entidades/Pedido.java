@@ -25,6 +25,9 @@ public class Pedido {
         this.idCliente = idCliente;
     }
 
+    /**
+     * TODO: Se puede mejorar la validación
+     */
     private static void validar(String codigoPedido, Date fechaPedido) throws InvalidParameterException {
         if (codigoPedido == null) {
             throw new InvalidParameterException("El codigo del pedido no puede ser nulo.");

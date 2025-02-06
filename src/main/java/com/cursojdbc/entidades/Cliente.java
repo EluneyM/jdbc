@@ -79,6 +79,9 @@ public class Cliente {
         this.limiteCredito = limiteCredito;
     }
 
+    /**
+     * TODO: Se puede mejorar la validación
+     */
     private static void validar(int codigoCliente, String nombreContacto, String apellidoContacto)
             throws InvalidParameterException {
         if (codigoCliente <= 0) {
