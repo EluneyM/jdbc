@@ -74,7 +74,7 @@ public class CasaDAO extends DAO {
         }
 
         if (casaEncontrada == null) {
-            System.out.printf("Cliente con código %s no encontrado", id);
+            System.out.printf("Casa con ID %s no encontrada", id);
         } else {
             System.out.println(casaEncontrada.toString());
         }
