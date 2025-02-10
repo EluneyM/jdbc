@@ -10,9 +10,9 @@ import com.cursojdbc.entidades.Estancia;
 public class EstanciaDAO extends DAO {
 
     public void guardarEstancia(Estancia estancia) throws Exception {
-        String sql = "INSERT INTO estancias(id_cliente, id_casa, nombre_huesped, fecha_desde, fecha_hasta) ('"
-                + estancia.getIdCliente() + "', '"
-                + estancia.getIdCasa() + "', '"
+        String sql = "INSERT INTO estancias(id_cliente, id_casa, nombre_huesped, fecha_desde, fecha_hasta) VALUES ("
+                + estancia.getIdCliente() + ", "
+                + estancia.getIdCasa() + ", '"
                 + estancia.getNombreHuesped() + "', '"
                 + estancia.getFechaDesde() + "', '"
                 + estancia.getFechaHasta() + "')";
@@ -24,7 +24,6 @@ public class EstanciaDAO extends DAO {
         insertarModificarEliminarDataBase(sql);
     }
 
-    // get
     public List<Estancia> listarTodasLasEstancias() throws Exception {
         String sql = "SELECT id_estancia, id_cliente, id_casa, nombre_huesped, fecha_desde, fecha_hasta FROM estancias";
         consultarDataBase(sql);
@@ -62,6 +61,24 @@ public class EstanciaDAO extends DAO {
         }
 
         return estanciaEncontrada;
+    }
+
+    public boolean casaEstaDisponible(int idCasa, LocalDate fechaDesde, LocalDate fechaHasta)
+            throws Exception, SQLException {
+        String sql = "SELECT * FROM estancias WHERE id_casa = " + idCasa +
+                " AND fecha_desde < '" + fechaHasta + "' AND fecha_hasta > '" + fechaDesde + "';";
+
+        consultarDataBase(sql);
+        Estancia estanciaEncontrada = null;
+        while (resultSet.next()) {
+            estanciaEncontrada = crearEstancia();
+        }
+
+        if (estanciaEncontrada == null) {
+            return true;
+        }
+
+        return false;
     }
 
     private Estancia crearEstancia() throws SQLException {
