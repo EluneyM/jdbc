@@ -80,4 +80,24 @@ public class FamiliaDAO extends DAO {
         return familia;
     }
 
+    public List<Familia> listarFamiliasConHijos() throws Exception {
+        String sql = "SELECT * FROM familias WHERE num_hijos >= 3 AND edad_maxima < 10";
+        List<Familia> familias = new ArrayList<>();
+
+        consultarDataBase(sql);
+        while (resultSet.next()) {
+            Familia familia = new Familia();
+            familia.setIdFamilia(resultSet.getInt("id_familia"));
+            familia.setNombre(resultSet.getString("nombre"));
+            familia.setEdadMinima(resultSet.getInt("edad_minima"));
+            familia.setEdadMaxima(resultSet.getInt("edad_maxima"));
+            familia.setNumHijos(resultSet.getInt("num_hijos"));
+            familia.setEmail(resultSet.getString("email"));
+            familia.setIdCasaFamilia(resultSet.getInt("id_casa_familia"));
+            familias.add(familia);
+        }
+
+        return familias;
+    }
+
 }

@@ -2,9 +2,12 @@ package com.cursojdbc;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
+import com.cursojdbc.entidades.Familia;
 import com.cursojdbc.servicios.EstanciaServicio;
+import com.cursojdbc.servicios.FamiliaServicio;
 
 public class Main {
 
@@ -79,9 +82,20 @@ public class Main {
     }
 
     // Métodos que deben ser implementados
-    private static void buscarFamiliasConHijos() {
+    private static void buscarFamiliasConHijos() throws Exception {
         // Llamar al método que consulta las familias con al menos 3 hijos y edad máxima
         // inferior a 10 años
+        FamiliaServicio fd = new FamiliaServicio();
+        List<Familia> listaFamilias = fd.listarFamiliasConHijos();
+
+        if (listaFamilias.isEmpty()) {
+            System.out.println("No hay familias que cumplan con los criterios.");
+        } else {
+            for (Familia familia : listaFamilias) {
+                System.out.println(familia.toString());
+                System.out.println("-------------------------------------");
+            }
+        }
     }
 
     private static void buscarCasasDisponiblesReinoUnido() {
