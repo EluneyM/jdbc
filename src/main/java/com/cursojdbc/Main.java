@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.cursojdbc.entidades.Familia;
+import com.cursojdbc.servicios.CasaServicio;
 import com.cursojdbc.servicios.EstanciaServicio;
 import com.cursojdbc.servicios.FamiliaServicio;
 
@@ -107,9 +108,22 @@ public class Main {
         // Llamar al método que consulta las familias con email Hotmail
     }
 
-    private static void consultarCasasDisponibles() {
+    private static void consultarCasasDisponibles() throws Exception {
         // Llamar al método que consulta las casas disponibles a partir de una fecha
         // dada y un número de días específico
+        CasaServicio cs = new CasaServicio();
+        sc.nextLine(); // Limpiar el buffer del scanner después de leer un número entero
+
+        System.out.println("Introduzca el nombre del país:");
+        String pais = sc.nextLine();
+
+        System.out.println("Introduzca la fecha de inicio (formato: YYYY-MM-DD):");
+        String fechaDesdeStr = sc.nextLine();
+        LocalDate fechaDesde = LocalDate.parse(fechaDesdeStr, DateTimeFormatter.ISO_LOCAL_DATE);
+
+        System.out.println("Introduzca la fecha de fin (formato: YYYY-MM-DD):");
+        int cantidadDias = sc.nextInt();
+        cs.listarCasasDisponibles(pais, fechaDesde, cantidadDias);
     }
 
     private static void buscarClientesConEstancias() {

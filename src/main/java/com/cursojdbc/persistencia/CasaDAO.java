@@ -1,6 +1,7 @@
 package com.cursojdbc.persistencia;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +60,12 @@ public class CasaDAO extends DAO {
             throw new Exception("La casa no puede ser nula");
         }
 
-        String sql = "UPDATE casas SET calle = " + casa.getCalle() + ", numero = " + casa.getNumero() + ", codigo_postal = " + casa.getCodigoPostal() + ", ciudad = " + casa.getCiudad() + ", pais = " + casa.getPais() + ", fecha_desde = " + casa.getFechaDesde() + ", fecha_hasta = " + casa.getFechaHasta() + ", tiempo_minimo = " + casa.getTiempoMinimo() + ", tiempo_maximo = " + casa.getTiempoMaximo() + ", precio_habitacion = " + casa.getPrecioHabitacion() + ", tipo_vivienda = " + casa.getTipoVivienda() + " WHERE id_casa = " + casa.getIdCasa() + ";";
+        String sql = "UPDATE casas SET calle = " + casa.getCalle() + ", numero = " + casa.getNumero()
+                + ", codigo_postal = " + casa.getCodigoPostal() + ", ciudad = " + casa.getCiudad() + ", pais = "
+                + casa.getPais() + ", fecha_desde = " + casa.getFechaDesde() + ", fecha_hasta = " + casa.getFechaHasta()
+                + ", tiempo_minimo = " + casa.getTiempoMinimo() + ", tiempo_maximo = " + casa.getTiempoMaximo()
+                + ", precio_habitacion = " + casa.getPrecioHabitacion() + ", tipo_vivienda = " + casa.getTipoVivienda()
+                + " WHERE id_casa = " + casa.getIdCasa() + ";";
 
         insertarModificarEliminarDataBase(sql);
     }
@@ -80,6 +86,37 @@ public class CasaDAO extends DAO {
         }
 
         return casaEncontrada;
+    }
+
+    public ArrayList<Casa> listarCasasDisponibles(String pais, LocalDate fechaDesde, int cantidadDias)
+            throws Exception {
+        String sql = "SELECT id_casa, calle, numero, codigo_postal, ciudad, " +
+                "pais, fecha_desde, fecha_hasta, tiempo_minimo, tiempo_maximo, " +
+                "precio_habitacion, tipo_vivienda " +
+                "FROM casas " +
+                "WHERE pais = '" + pais + "' " +
+                "AND NOT (fecha_desde <= DATE_ADD('" + fechaDesde + "', INTERVAL " + cantidadDias + " DAY) " +
+                "AND fecha_hasta >= '" + fechaDesde + "');";
+
+        consultarDataBase(sql);
+        ArrayList<Casa> casas = new ArrayList<>();
+        while (resultSet.next()) {
+            Casa casa = new Casa();
+            casa.setIdCasa(resultSet.getInt("id_casa"));
+            casa.setCalle(resultSet.getString("calle"));
+            casa.setNumero(resultSet.getInt("numero"));
+            casa.setCodigoPostal(resultSet.getString("codigo_postal"));
+            casa.setCiudad(resultSet.getString("ciudad"));
+            casa.setPais(resultSet.getString("pais"));
+            casa.setFechaDesde(resultSet.getDate("fecha_desde").toLocalDate());
+            casa.setFechaHasta(resultSet.getDate("fecha_hasta").toLocalDate());
+            casa.setTiempoMinimo(resultSet.getInt("tiempo_minimo"));
+            casa.setTiempoMaximo(resultSet.getInt("tiempo_maximo"));
+            casa.setPrecioHabitacion(resultSet.getDouble("precio_habitacion"));
+            casa.setTipoVivienda(resultSet.getString("tipo_vivienda"));
+            casas.add(casa);
+        }
+        return casas;
     }
 
     private Casa crearCasa() throws SQLException {
